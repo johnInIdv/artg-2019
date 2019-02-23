@@ -4,7 +4,7 @@ function LineChart(){
 
 	let maxY;
 	const bisect = d3.bisector(d => d.key).right; //this will give us a function
-	let cb;
+	let yearChangeCallback;
 
 	function exportFunction(data, rootDOM, key){
 
@@ -116,7 +116,7 @@ function LineChart(){
 				const mouse = d3.mouse(this);
 				const mouseX = mouse[0];
 				const year = scaleX.invert(mouseX);
-				
+
 				const idx = bisect(data, year);
 				const datum = data[idx];
 
@@ -124,6 +124,8 @@ function LineChart(){
 					.attr('transform', `translate(${scaleX(datum.key)}, ${scaleY(datum.value)})`)
 					.select('text')
 					.text(datum.value);
+
+				yearChangeCallback(datum.key);
 
 			})
 			.on('mouseleave', function(d){
@@ -138,7 +140,10 @@ function LineChart(){
 		return this;
 	}
 
-	exportFunction.on = function(event, callback){
+	exportFunction.onChangeYEar = function(callback){
+		//event ===> "year:change"
+		//callback ===> arg => console.log(arg)
+		yearChangeCallback = callback; //arg => console.log(arg)
 		return this;
 	}
 

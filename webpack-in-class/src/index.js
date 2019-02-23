@@ -17,7 +17,7 @@ import LineChart from './viewModules/LineChart';
 import Cartogram from './viewModules/Cartogram';
 
 //Create global dispatch object
-const globalDispatch = dispatch("change:country");
+const globalDispatch = dispatch("change:country", "change:year");
 
 //Build UI for countryTitle component
 const title = select('.country-view')
@@ -30,6 +30,11 @@ globalDispatch.on('change:country', (code, displayName, migrationData) => {
 	renderComposition(migrationData.filter(d => d.origin_code === code));
 	renderCartogram(migrationData.filter(d => d.origin_code === code));
 });
+globalDispatch.on('change:year', year => {
+	//re-render the composition and cartogram viewModules
+console.log("global "+year);
+})
+// globalDispatch.call('change:year', null, year);
 
 Promise.all([
 		migrationDataPromise,
@@ -61,7 +66,7 @@ Promise.all([
 
 			return d;
 		});
-	
+
 		//Render the view modules
 		globalDispatch.call('change:country',null,"840","World",migrationAugmented);
 
@@ -92,9 +97,13 @@ function renderLineCharts(data){
 	//Find max value in data
 	const maxValue = max( data.map(subregion => max(subregion.values, d => d.value)) ) //[]x18
 
-	const lineChart = LineChart()
+	const lineChart = LineChart() //returns inner function = "exportFunction"
 		.maxY(maxValue)
-		.on('year:change', year => console.log(year));
+		.onChangeYEar(
+			// 'year:change', //string, represents event type
+			// year => console.log(year)//function, 'callback function' to be executed on the event
+			year => globalDispatch.call('change:year',null,year)
+		);
 
 	const charts = select('.chart-container')
 		.selectAll('.chart')
@@ -107,7 +116,7 @@ function renderLineCharts(data){
 	charts.merge(chartsEnter)
 		.each(function(d){
 			lineChart(
-				d.values, 
+				d.values,
 				this,
 				d.key
 			);
