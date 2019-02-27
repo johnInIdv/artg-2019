@@ -140,9 +140,9 @@ function LineChart(){
 		return this;
 	}
 
-	exportFunction.onChangeYEar = function(callback){
-		//event ===> "year:change"
-		//callback ===> arg => console.log(arg)
+	exportFunction.onChangeYear = function(callback){
+		//event ==> "year:change"
+		//callback ==> arg => console.log(arg)
 		yearChangeCallback = callback; //arg => console.log(arg)
 		return this;
 	}

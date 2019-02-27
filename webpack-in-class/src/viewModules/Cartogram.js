@@ -88,6 +88,7 @@ export default function Cartogram(rootDOM, data){
 		.filter(d => scaleSize(d.value)>30)
 		.text(d => d.dest_name);
 
+<<<<<<< HEAD
 		//configure the forceSimulation
 		const force_x = forceX().x(d => d.x);
 		const force_y = forceY().y(d => d.y);
@@ -105,3 +106,21 @@ export default function Cartogram(rootDOM, data){
 			})
 			.restart();
 }
+=======
+	//first configure the forces
+	const force_x = forceX().x(d => w/2);
+	const force_y = forceY().y(d => h/2);
+	const force_collide = forceCollide(d => scaleSize(d.value));
+	//combine the forces into a simulation
+	const simulation = forceSimulation()
+		.force('x', force_x)
+		.force('y', force_y)
+		.force('collide', force_collide);
+	simulation.nodes(dataByYear)
+		.on('tick', () => {
+			nodesCombined
+				.attr('transform', d => `translate(${d.x}, ${d.y})`);
+		})
+		.restart()
+}
+>>>>>>> 69011152ea87fcbf5304e1dec9c6c92592a7db34
