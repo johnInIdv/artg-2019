@@ -189,7 +189,7 @@ function parseMigrationData(d){
 	const migrationFlows = [];
 	const dest_name = d['Major area, region, country or area of destination'];
 	const year = +d.Year
-	
+
 	delete d.Year;
 	delete d['Sort order'];
 	delete d['Major area, region, country or area of destination'];

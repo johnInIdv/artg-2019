@@ -1,5 +1,5 @@
 import './style.css';
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
 import {select, max, dispatch} from 'd3';
 
 import {
@@ -38,11 +38,6 @@ globalDispatch.on('change:country', (code, displayName) => {
 		renderCartogram(filteredData, currentYear);
 	});
 });
-globalDispatch.on('change:year', year => {
-	//re-render the composition and cartogram viewModules
-console.log("global "+year);
-})
-// globalDispatch.call('change:year', null, year);
 
 
 globalDispatch.on('change:year', year => {
@@ -86,12 +81,10 @@ function renderLineCharts(data){
 	//Find max value in data
 	const maxValue = max( data.map(subregion => max(subregion.values, d => d.value)) ) //[]x18
 
-	const lineChart = LineChart() //returns inner function = "exportFunction"
+	const lineChart = LineChart()
 		.maxY(maxValue)
-		.onChangeYEar(
-			// 'year:change', //string, represents event type
-			// year => console.log(year)//function, 'callback function' to be executed on the event
-			year => globalDispatch.call('change:year',null,year)
+		.onChangeYear(
+			year => globalDispatch.call('change:year',null, year) //function, "callback function" to be executed upon the event
 		);
 
 	const charts = select('.chart-container')
